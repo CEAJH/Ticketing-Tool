@@ -1,0 +1,47 @@
+name: CI - Ticketing Tool (PHP)
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Verificar versión de PHP
+        run: php -v
+
+      - name: Verificar sintaxis de todos los PHP
+        run: |
+          echo "Verificando sintaxis..."
+          find . -type f -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Instalar Composer (si existe composer.json)
+        run: |
+          if [ -f composer.json ]; then
+            echo "Instalando dependencias con Composer..."
+            composer install --no-progress --no-interaction
+          else
+            echo "composer.json no existe, saltando instalación"
+          fi
+
+      - name: Ejecutar PHPUnit (solo si existe vendor/bin/phpunit)
+        run: |
+          if [ -f vendor/bin/phpunit ]; then
+            echo "Ejecutando pruebas PHPUnit..."
+            vendor/bin/phpunit
+          else
+            echo "No existe PHPUnit. Pruebas no ejecutadas."
+          fi
