@@ -1,0 +1,33 @@
+header#page-header {
+  color: #F0F0F0;
+  background: #051373;
+  padding: 5px;
+  border-bottom: 3px solid darken(#237CBE, 10%);
+  text-align: center;
+}
+
+body {
+ //color: #1d24f2;
+  background: #dfe7ea;
+}
+
+div#div1 {
+    background: #dfe7ea;
+    //color: #1d24f2;
+    padding: 5px;
+}
+
+aside#sidebar {
+  float: right;
+  background: #dfe7ea;
+  width: 200px;
+}
+
+footer#page-footer {
+  color: #237CBE;
+  background: #051373;
+  text-align: center;
+  padding: 5px;
+  border-top: 3px solid darken(#F0F0F0, 10%);
+}
+

@@ -1,0 +1,83 @@
+<!doctype html>
+<?php
+require('project_functions.php');
+require('project_values.php');
+html_head("ticket status");
+require('project_header.php');
+require('project_sidebar.php');
+
+# Code for your web page follows.
+if (!isset($_POST['submit']))
+{
+?>
+<h2>Ticket Status</h2>
+<form action="project_status.php" method="post">
+  <table border="0">
+    <tr bgcolor="#cccccc">
+      
+    </tr>
+    <tr>
+    <td>Type</td>
+    <td>
+      <select name="type">
+       <option value="Request">Request</option>
+       <option value="Incident">Incident</option>     
+      </select>
+    </td>
+    </tr>
+    <tr>
+      <td>Ticket Number</td>
+      <td align="left"><input type="text" name="t" size="35" maxlength="35"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="right"><input type="submit" name="submit" value="Submit"></td>
+    </tr>
+  </table>
+</form>
+<?php
+} else {
+  $type = $_POST['type'];
+  $ticket = $_POST['ticket'];
+  try
+  {
+    $db = new PDO(DB_PATH, DB_LOGIN, DB_PW);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    if ($type == "Incident") 
+    {
+      $tickets = "incidents";
+    } elseif ($type == "Request")
+      {
+        $tickets = "requests";
+      }   
+ //   echo $tickets;
+ 
+    print "<h2>Ticket Status</h2>"; 
+    print "<table border=1>";
+    print "<tr>";
+    print "<td>Customer Id</td><td>Title</td><td>Type</td><td>Details</td><td>Priority</td><td>Date</td>";
+    print "</tr>";
+    $row = $db->query("SELECT * FROM $tickets WHERE id = $ticket")->fetch(PDO::FETCH_ASSOC);
+    print "<tr>";
+    print "<td>".$row['customers_id']."</td>";
+    print "<td>".$row['title']."</td>";
+    print "<td>".$row['type']."</td>";
+    print "<td>".$row['details']."</td>";
+    print "<td>".$row['priority']."</td>";
+    print "<td>".$row['date']."</td>";
+    print "</tr>";
+    print "</table>";
+    $db = NULL;    
+  }
+
+  catch(PDOException $e)
+  {
+    echo 'Exception : '.$e->getMessage();
+    echo "<br/>";
+    $db = NULL;
+  }
+
+}
+
+require('project_footer.php');
+?>
